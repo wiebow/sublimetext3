@@ -1,0 +1,7 @@
+<snippet>
+	<content><![CDATA[
+DebugAssert( ${1:expression}, "${2:assert failed!}")
+]]></content>
+	<tabTrigger>debugassert</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

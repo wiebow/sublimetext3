@@ -1,0 +1,23 @@
+<snippet>
+	<content><![CDATA[
+Namespace ${1:namespace}
+
+#Import "<std>"
+#Import "<mojo>"
+
+Using std..
+Using mojo..
+
+Class ${2:MyWindow} Extends Window
+	${3:}
+End Class
+
+Function Main:Void()
+	New AppInstance
+	New ${2:MyWindow}
+	App.Run()
+End Function
+]]></content>
+	<tabTrigger>mojo-boilerplate</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

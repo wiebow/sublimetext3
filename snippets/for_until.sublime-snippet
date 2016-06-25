@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+For Local ${1:var}:= ${2:0} Until ${3:1}
+	$4
+Next
+]]></content>
+	<tabTrigger>for-until</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

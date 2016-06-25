@@ -1,0 +1,13 @@
+<snippet>
+	<content><![CDATA[
+Select $1
+	Case $2
+		$3
+	Default
+		$4
+End Select
+$0
+]]></content>
+	<tabTrigger>select</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

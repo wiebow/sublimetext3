@@ -1,0 +1,7 @@
+<snippet>
+	<content><![CDATA[
+Field ${1:name}:${2:type}
+]]></content>
+	<tabTrigger>field</tabTrigger>
+	<scope>meta.class.monkey2</scope>
+</snippet>

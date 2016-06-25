@@ -1,0 +1,40 @@
+
+<snippet>
+	<content><![CDATA[
+Class ${1:name}State Extends State
+
+	' add your setup code in this method
+    Method New()
+        $0
+    End Method
+
+    'hook for code when entering the state
+    Method Enter:Void() Override
+    End Method
+
+    'hook for code when leaving the state
+    Method Leave:Void() Override
+    End Method
+
+    ' add your state update code in this method
+    Method Update:Void( delta:Double ) Override
+    End Method
+
+    'hook for code that is called just before any rendering
+    Method PreRender:Void(canvas:Canvas, tween:Double) Override
+    End Method
+
+    'hook for state render code
+    Method Render:Void(canvas:Canvas, tween:Double) Override
+    End Method
+
+    'hook for code that is called right after all rendering
+    Method PostRender:Void(canvas:Canvas, tween:Double) Override
+    End Method
+
+End Class
+]]></content>
+	<tabTrigger>state</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>
+

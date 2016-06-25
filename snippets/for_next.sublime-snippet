@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+For Local ${1:index}:= ${2:0} To ${3:10}
+	${4:}
+Next
+]]></content>
+	<tabTrigger>for_next</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

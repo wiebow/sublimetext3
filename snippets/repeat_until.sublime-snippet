@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+Repeat
+	$0
+Until ${1:expression}
+]]></content>
+	<tabTrigger>repeat-until</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

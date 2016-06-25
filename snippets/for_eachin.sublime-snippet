@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+For Local ${1:var}:= Eachin ${2:expression}
+	$3
+Next
+]]></content>
+	<tabTrigger>for-eachin</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

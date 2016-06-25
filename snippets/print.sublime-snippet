@@ -1,0 +1,7 @@
+<snippet>
+	<content><![CDATA[
+Print( "$1" )
+]]></content>
+	<tabTrigger>print</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

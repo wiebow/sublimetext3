@@ -1,0 +1,7 @@
+<snippet>
+	<content><![CDATA[
+Keyboard.KeyHit( Key.$1 )
+]]></content>
+	<tabTrigger>keyhit</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

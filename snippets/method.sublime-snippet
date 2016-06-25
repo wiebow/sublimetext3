@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+Method ${1:Name}:${2:Void}(${3})
+	${4}
+End Method
+]]></content>
+	<tabTrigger>method</tabTrigger>
+	<scope>meta.class.monkey2</scope>
+</snippet>

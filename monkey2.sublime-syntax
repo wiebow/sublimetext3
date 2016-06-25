@@ -1,0 +1,555 @@
+%YAML1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+# http://www.rexegg.com/regex-quickstart.html
+# http://regextutorials.com/index.html
+
+# assumptions:
+# Class and function names: PascalCase
+# field and variable names: camelCase or _camelCase
+# custom class definition: Name:Class
+# contant: ALL_CAPS13
+
+# if blocks MUST be closed with endif, otherwise it clashes with other blocks
+# that use END to close.
+# if-end if blocks are not defined, as they can also be a single line structure
+
+
+name: Monkey2
+file_extensions:
+  - monkey2
+scope: source.monkey2
+
+contexts:
+  main:
+    - include: def-class
+    - include: def-enum
+    - include: def-function
+    - include: def-interface
+    - include: def-struct
+    - include: block-extern     #not working correctly yet!
+    - include: language
+    - include: modules
+
+  body-class:
+    - include: def-enum
+    - include: def-function
+    - include: def-method
+    - include: def-property
+    - include: def-operator
+    - include: language
+    - include: modules
+    - include: variables
+
+  body-enum:
+    - include: language
+    - include: modules
+
+  body-function:
+    - include: language
+    - include: modules
+    - include: def-lambda
+
+  body-interface:
+    - include: modules
+    - match: ([Mm]ethod)\s+([A-Z]\w+)
+      captures:
+        1: keyword.monkey2
+        2: entity.name.class.monkey2
+
+  body-lambda:
+    - include: language
+    - include: modules
+
+  body-method:
+    - include: language
+    - include: modules
+    - include: variables
+
+  body-property:
+    - include: language
+    - include: modules
+    - include: variables
+    - match: \b(?i:Setter|Return)\b
+      scope: keyword.monkey2
+
+  body-operator:
+    - include: def-parameters
+    - include: language
+    - include: modules
+
+  language:
+    - include: block-select
+    - include: block-try
+    - include: comments
+    - include: constants
+    - include: keywords
+    - include: monkey-functions
+    - include: numerics
+    - include: operators
+    - include: strings
+
+  parameters:
+    - include: def-lambda
+    - include: constants
+    - include: modules
+    - include: numerics
+    - include: operators
+    - include: strings
+    - include: variables
+    - include: monkey-functions
+    - match: \b(?i:Else|New)\b
+      scope: keyword.monkey2
+
+# ----------
+
+  # select-blocks can contain select-blocks
+  # so block selection is a bit different here, we must
+  # absorb the keyword right away
+  block-select:
+    - match: ([Ss]elect)
+      scope: keyword.control.monkey2
+      push:
+        - meta_scope: meta.selectblock.monkey2
+        - include: language
+        - include: modules
+        - include: parameters
+        - include: variables
+
+        - match: \b(?i:End\s+Select|End)\b
+          scope: punctuation.section.selectblock.end.monkey2
+          captures:
+            0: keyword.control.monkey2
+          pop: true
+
+  block-extern:
+    - match: ([Ee]xtern)
+      scope: keyword.control.monkey2
+      push:
+        - meta_scope: meta.externblock.monkey2
+
+        # needs include!! or limited keywords
+
+        - match: \b(?i:Public|Private)\b
+          scope: punctuation.section.externblock.end.monkey2
+          captures:
+            0: keyword.control.monkey2
+          pop: true
+
+  block-try:
+    - match: ([Tt]ry)
+      scope: keyword.control.monkey2
+      push:
+        - meta_scope: meta.tryblock.monkey2
+        - include: language
+        - include: modules
+
+        - match: \b(?i:End\s+Try|End)\b
+          scope: punctuation.section.tryblock.end.monkey2
+          captures:
+            0: keyword.control.monkey2
+          pop: true
+
+  constants:
+    - match: \b(?i:true|false)\b
+      scope: constant.language.monkey2
+    - match: \b([A-Z0-9_]+)\b
+      scope: constant.language.monkey2
+#      scope: support.constant.input.monkey2
+
+  comments:
+    - match: "'.*$"
+      scope: comment.line.monkey2
+
+    - match: (?i:#rem)
+      push:
+      - meta_scope: comment.block.monkey2
+
+      - match: (@param|@return|@hidden|monkeydoc)
+        scope: constant.language.monkey2
+
+      - match: (?i:#end)
+        pop: true
+
+  # merged class and struct!!
+  # is this right? can structs be extended?
+
+  def-class:
+    - match: (?=[Cc]lass|[Ss]truct)
+      push:
+        - meta_scope: meta.class.monkey2
+        - include: def-parameters
+        - include: body-class
+
+        - match: (([Cc]lass|[Ss]truct)\s+([A-Z]\w+))
+          scope: meta.class.identifier.monkey2
+          captures:
+            2: keyword.monkey2
+            3: entity.name.class.monkey2
+
+        - match: \b(?i:abstract|virtual|final|field|protected|static)\b
+          scope: keyword.monkey2
+
+        # one extend
+        # also added lower case class name.
+
+        - match: \b(?i:extends)\s+([A-Za-z]\w+)\b
+          scope: meta.class.modifier.monkey2
+          captures:
+            0: keyword.monkey2
+            1: entity.other.inherited-class.monkey2
+
+        # multiple interfaces possible
+        # so using a block and using extends to pop
+
+        - match: (?=[Ii]mplements)
+          push:
+            - meta_scope: meta.interface.extend.monkey2
+
+            - match: (?i:Implements)
+              scope: keyword.monkey2
+            - match: ([A-Z]\w+)
+              scope: entity.other.inherited-class.monkey2
+
+            - match: (?=[Ee]xtends|$)
+              scope: punctuation.section.interface.end.monkey2
+              pop: true
+
+        # how this class definition ends
+
+        - match: \b(?i:end\s+class|end\s+struct|end)\b
+          scope: punctuation.section.class.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
+  def-enum:
+    - match: (?=[Ee]num)
+      push:
+        - meta_scope: meta.enum.monkey2
+        - include: body-enum
+        - match: (?i:enum)\s+(\w+)
+          scope: meta.enum.identifier.monkey2
+          captures:
+            0: keyword.monkey2
+            1: entity.name.class.monkey2
+
+        - match: \b(?i:end\s+enum|end)\b
+          scope: punctuation.section.enum.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
+  def-function:
+    - match: (?=[Ff]unction)
+      push:
+        - meta_scope: meta.function.monkey2
+
+        - match: ([Ff]unction)\s+([A-Za-z]\w+)
+          scope: meta.function.identifier.monkey2
+          captures:
+            1: keyword.monkey2
+            2: entity.name.function.monkey2
+
+        - include: def-parameters
+        - include: body-function
+
+        - match: \b(?i:end\s+function|end)\b
+          scope: punctuation.section.function.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
+  def-interface:
+    - match: (?=[Ii]nterface)
+      push:
+        - meta_scope: meta.interface.monkey2
+        - include: body-interface
+        - match: (([Ii]nterface)\s+([A-Z]\w+))
+          scope: meta.interface.identifier.monkey2
+          captures:
+            2: keyword.monkey2
+            3: entity.name.class.monkey2
+#            5: storage.type.class.monkey2
+
+        # interface can extend multiple interfaces
+
+        - match: (?=[Ee]xtends)
+          push:
+            - meta_scope: meta.interface.extend.monkey2
+
+            - match: (?i:extends)
+              scope: keyword.monkey2
+            - match: ([A-Z]\w+)
+              scope: entity.other.inherited-class.monkey2
+
+            - match: $
+              scope: punctuation.section.parameters.end.monkey2
+              pop: true
+
+        - match: \b(?i:end\s+interface|end)\b
+          scope: punctuation.section.interface.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
+
+  # lambda: essentially the same as functions
+  # except no name
+
+  def-lambda:
+    - match: (?=[Ll]ambda)
+      push:
+        - meta_scope: meta.lambda.monkey2
+        - include: def-parameters
+
+        - match: (([Ll]ambda)\s*(:(\w+))?)
+          scope: meta.lambda.identifier.monkey2
+          captures:
+            2: keyword.monkey2
+            4: storage.type.class.monkey2
+        - match: \b(?i:end\s+lambda|end)\b
+          scope: punctuation.section.lambda.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
+        - include: body-lambda
+
+  def-method:
+    - match: (?=[Mm]ethod)
+      push:
+        - meta_scope: meta.method.monkey2
+        - match: ([Mm]ethod)\s+([A-Z]\w+)
+          scope: meta.method.identifier.monkey2
+          captures:
+            1: keyword.monkey2
+            2: entity.name.method.monkey2
+
+        - include: body-method
+        - include: def-parameters
+
+        - match: \b(?i:end\s+method|end)\b
+          scope: punctuation.section.method.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
+        - match: \b(?i:abstract|final|override|virtual)\b
+          scope: keyword.monkey2
+
+  def-parameters:
+    - match: \(
+      push:
+        - meta_scope: meta.parameters.monkey2
+        - include: parameters
+        - include: def-parameters
+
+        - match: \)
+          scope: punctuation.section.parameters.end.monkey2
+          pop: true
+
+  def-operator:
+    - match: (?=[Oo]perator)
+      push:
+        - meta_scope: meta.operator.monkey2
+        - include: body-operator
+        - match: ([Oo]perator)
+          scope: meta.operator.identifier.monkey2
+          captures:
+            1: keyword.monkey2
+        - match: \b(?i:end\s+operator|end)\b
+          scope: punctuation.section.operator.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
+  def-property:
+    - match: (?=[Pp]roperty)
+      push:
+        - meta_scope: meta.property.monkey2
+        - include: body-property
+        - match: ([Pp]roperty)\s+([A-Z]\w*)
+          scope: meta.property.identifier.monkey2
+          captures:
+            1: keyword.monkey2
+            2: entity.name.property.monkey2
+        - match: \b(?i:end\s+property|end)\b
+          scope: punctuation.section.property.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
+
+  keywords:
+    - match: \b(?i:import|using|namespace|extern|alias|new)\b
+      scope: keyword.monkey2
+    - match: \b(?i:local|global|const)\b
+      scope: keyword.monkey2
+    - match: \b(?i:case|catch|continue|default|delete|end\s*if|eachin|else|elseif|exit|for|forever|if|next|private|public|repeat|return|step|then|throw|try|to|until|wend|while)\b
+      scope: keyword.control.monkey2
+
+
+  modules:
+    - include: module-monkey
+    - include: module-std
+    - include: module-mojo
+
+  module-monkey:
+    # debug
+    - match: \b(Assert|DebugAssert|GetDebugStack|DebugLog)\b
+      scope: support.function.debug.monkey2
+
+    # gc
+    - match: \b(?i:GCCollect)\b
+      scope: support.function.gc.monkey2
+
+    # math
+    - match: \b(?i:Acos|ASin|ATan|ATan2|Abs|Ceil|Clamp|Cos|Exp|Floor|Log|Log10|Log2|Max|Min|Pow|Round|Sgn|Sin|Sqrt|Tan)\b
+      scope: support.function.math.monkey2
+    - match: \b(TwoPi|Pi)\b
+      scope: constant.math.monkey2
+
+    # types
+    - match: \b(?i:Array|Bool|Byte|Double|Float|Int|Long|Null|Short|String|UByte|UInt|ULong|UShort|CString|Utf8String|Void|WString|Exception|Object|Throwable)\b
+      scope: storage.type.class.monkey2
+    - match: \b(?i:IIntegral|INumeric|IReal)\b
+      scope: interface.types.monkey2
+
+  module-std:
+    # collections
+    - match: \b(FloatList|FloatStack|IntList|IntStack|StringList|StringStack|FloatMap|IntMap|List|Map|Stack|StringMap)\b
+      scope: support.class.collections.monkey2
+    - match: \b(?i:IContainer|IIterator)\b
+      scope: support.interface.collections.monkey2
+
+    # fiber
+    - match: \b(Fiber|Future)\b
+      scope: support.class.fiber.monkey2
+
+    # filesystem
+    - match: \b(FileType)\b
+      scope: support.class.filesystem.monkey2
+    - match: \b(?i:AppArgs|AppDir|AppPath|AssetsDir|ChangeDir|CopyFile|CreateDir|CurrentDir|DeleteDir|DeleteFile|ExtractDir|ExtractExt|ExtractRootDir|GetFileTime|GetFileType|IsRootDir|LoadDir|RealPath|Rename|StripDir|StripExt|StripSlashes)\b
+      scope: support.function.filesystem.monkey2
+
+    # geom
+    - match: \b(AffineMat3f|Mat3f|Mat4f|Rectf|Recti|Vec2f|Vec2i|Vec3f|Vec4f|Axis|AffineMat3|Mat3|Mat4|Rect|Vec2|Vec3|Vec4)\b
+      scope: support.class.geom.monkey2
+    - match: \b(?i:TransformRecti)\b
+      scope: support.function.geom.monkey2
+
+    # graphics
+    - match: \b(PixelFormat|Color|Pixmap)\b
+      scope: support.class.graphics.monkey2
+    - match: \b(?i:PixelFormatDepth)\b
+      scope: support.function.graphics.monkey2
+
+    # json
+    - match: \b(JsonArray|JsonBool|JsonError|JsonNumber|JsonObject|JsonParser|JsonString|JsonValue)\b
+      scope: support.class.json.monkey2
+
+    # memory
+    - match: \b(ByteOrder|DataBuffer)\b
+      scope: support.class.memory.monkey2
+
+    # random
+    - match: \b(Rnd|RndULong|SeedRnd)\b
+      scope: support.function.random.monkey2
+
+    # stream
+    - match: \b(DataStream|FileStream|Stream)\b
+      scope: support.class.stream.monkey2
+
+    # stringio
+    - match: \b(?i:Hex|LoadString|SaveString)\b
+      scope: support.function.stringio.monkey2
+
+    # time
+    - match: \b(Microsecs|Millisecs)\b
+      scope: support.function.time.monkey2
+
+
+  module-mojo:
+
+    # app
+    - match: \b(EventType|WindowFlags|AppInstance|Event|KeyEvent|MouseEvent|Skin|Style|View|Window|WindowEvent)\b
+      scope: support.class.app.monkey2
+    - match: \b(App)\b
+      scope: support.variable.language.monkey2
+
+    # audio
+    - match: \b(AudioDevice|Channel|Sound)\b
+      scope: support.class.audio.monkey2
+    - match: \b(Audio)\b
+      scope: support.variable.language.monkey2
+
+    # graphics
+    - match: \b(BlendMode|TextureFlags|Glyph|Canvas|Font|Image|Material|Shader|Texture)\b
+      scope: support.class.graphics.monkey2
+
+    # input
+    - match: \b(JoystickHat|Key|ModifierMouseButton|InputDevice|JoystickDevice|KeyboardDevice|MouseDevice)\b
+      scope: support.class.input.monkey2
+    - match: \b(Keyboard|Mouse)\b
+      scope: support.constant.input.monkey2
+
+    # process
+    - match: \b(Process)\b
+      scope: support.class.process.monkey2
+
+    # requesters
+    - match: \b(?i:Confirm|Notify|Proceed|RequestDir|RequestFile)\b
+      scope: support.function.requesters.monkey2
+
+    # timer
+    - match: \b(Timer)\b
+      scope: support.class.timer.monkey2
+
+
+  monkey-functions:
+    - match: \b(?i:Print|Cast)\b
+      scope: entity.name.function.monkey2
+#    - match: \b(?i:IsAlpha|IsDigit|IsHexDigit|IsIdent|IsSpace)\b
+#      scope: function.chartype.monkey2
+    - match: \b(?i:MarkdownToHtml)\b
+      scope: function.markdown.monkey2
+
+  numerics:
+    - match: -?(\b\d+\b)
+      scope: constant.numeric.integer.monkey2
+    - match: -?((?<!\.)\.?\b\d+(?:e?-?\d*)|\b\d+(?:e-?\d*)|\b\d*\.\d+(?:e?-?\d*))\b
+      scope: constant.numeric.float.monkey2
+    - match: -?(%\b[01]+\b)
+      scope: constant.numeric.binary.monkey2
+    - match: -?(\$\b[0-9a-fA-F]+)\b
+      scope: constant.numeric.hexadecimal.monkey2
+
+  operators:
+     - match: (:=|=|\b[Pp]tr\b)
+       scope: keyword.operator.assignment.monkey2
+     - match: (-=|\*=|~=|/=|\+=|&=|(?i):Shl|(?i):Shr|(?i):Mod\b|:\|)
+       scope: keyword.operator.arithmetic.monkey2
+     - match: (-|\*|~|/|\+|&|(?i)Shl|(?i)Shr|(?i)Mod |\|)
+       scope: keyword.operator.arithmetic.monkey2
+     - match: (=|<>|<|>|<=|>=|<=>)
+       scope: keyword.operator.comparison.monkey2
+     - match: \b(?i:And|Not|Or)\b
+       scope: keyword.operator.logical.monkey2
+
+  storage-modifiers:
+    - match: \b(?i:final|abstract|extends|implements|override)\b
+      scope: storage.modifier.monkey2
+
+  strings:
+    - match: '"'
+      push:
+      - meta_scope: string.quoted.double.monkey2
+      - match: ~.
+        scope: constant.character.escape.monkey2
+      - match: '"'
+        pop: true
+
+  variables:
+    - match: \b(?i:self|super)\b
+      scope: variable.language.monkey2

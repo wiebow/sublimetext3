@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+Function ${1:name}:${2:returns}( ${3} )
+	${4}
+End Function
+]]></content>
+	<tabTrigger>function</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

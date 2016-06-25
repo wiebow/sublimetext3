@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+#Rem monkeydoc
+#End
+Class ${1:ClassName} ${2:Extends ${3:InheritedClass}}
+	$0
+End Class
+]]></content>
+	<tabTrigger>class</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

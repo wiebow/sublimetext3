@@ -1,0 +1,13 @@
+<snippet>
+	<content><![CDATA[
+If ${1:eval}
+	${2:}
+ElseIf ${3:}
+	${4:}
+Else
+	${5:}
+Endif
+]]></content>
+	<tabTrigger>if_elseif</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

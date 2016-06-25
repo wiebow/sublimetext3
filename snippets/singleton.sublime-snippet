@@ -1,0 +1,35 @@
+
+<snippet>
+	<content><![CDATA[
+Class ${1:SingletonName}
+
+	Function GetInstance:${1:SingletonName}()
+		If Not _instance Then Return New ${1:SingletonName}
+		Return _instance
+	End Function
+
+	Method New()
+		DebugAssert( _instance = False, "Unable to create another instance of singleton class: Controller")
+		_instance = Self
+		Self.Initialize()
+	End Method
+
+
+	Method Destroy()
+		_instance = Null
+	End Method
+
+	Method Initialize()
+		$0
+	End Method
+
+	Private
+
+	Global _instance:${1:SingletonName}
+
+End Class
+]]></content>
+	<tabTrigger>singleton</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>
+

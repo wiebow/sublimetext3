@@ -1,0 +1,7 @@
+<snippet>
+	<content><![CDATA[
+If ${1:eval} Then ${2:statement}
+]]></content>
+	<tabTrigger>if_then</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

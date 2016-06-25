@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+Repeat
+	$1
+Forever
+]]></content>
+	<tabTrigger>repeat-forever</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

@@ -1,0 +1,12 @@
+<snippet>
+	<content><![CDATA[
+Try
+	$1
+Catch ${2:ident}:${3:type}
+	$4
+End Try
+$0
+]]></content>
+	<tabTrigger>try-endtry</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

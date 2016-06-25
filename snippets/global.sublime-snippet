@@ -1,0 +1,7 @@
+<snippet>
+	<content><![CDATA[
+Global ${1:name}:${2:type}
+]]></content>
+	<tabTrigger>global</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

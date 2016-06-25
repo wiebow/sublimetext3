@@ -1,0 +1,10 @@
+<snippet>
+	<content><![CDATA[
+While $1
+	$2
+Wend
+$0
+]]></content>
+	<tabTrigger>while-wend</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

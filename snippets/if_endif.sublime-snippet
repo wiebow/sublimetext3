@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+If ${1:eval}
+	${2:}
+Endif
+]]></content>
+	<tabTrigger>if_endif</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

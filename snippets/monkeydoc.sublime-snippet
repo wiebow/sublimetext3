@@ -1,0 +1,9 @@
+<snippet>
+	<content><![CDATA[
+#Rem monkeydoc $1
+	$2
+#End
+]]></content>
+	<tabTrigger>monkeydoc</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>
