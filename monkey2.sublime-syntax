@@ -52,10 +52,11 @@ contexts:
 
   body-interface:
     - include: modules
-    - match: ([Mm]ethod)\s+([A-Z]\w+)
+    - match: ([Mm]ethod)\s+([A-Za-z]\w+)
       captures:
         1: keyword.monkey2
         2: entity.name.class.monkey2
+    - include: def-parameters
 
   body-lambda:
     - include: language
@@ -71,6 +72,8 @@ contexts:
     - include: modules
     - include: variables
     - match: \b(?i:Setter|Return)\b
+      scope: keyword.monkey2
+    - match: \b(?i:Override|Virtual|Final)\b
       scope: keyword.monkey2
 
   body-operator:
@@ -181,7 +184,7 @@ contexts:
         - include: def-parameters
         - include: body-class
 
-        - match: (([Cc]lass|[Ss]truct)\s+([A-Z]\w+))
+        - match: (([Cc]lass|[Ss]truct)\s+([A-Za-z]\w+))
           scope: meta.class.identifier.monkey2
           captures:
             2: keyword.monkey2
@@ -208,7 +211,7 @@ contexts:
 
             - match: (?i:Implements)
               scope: keyword.monkey2
-            - match: ([A-Z]\w+)
+            - match: ([A-Za-z]\w+)
               scope: entity.other.inherited-class.monkey2
 
             - match: (?=[Ee]xtends|$)
@@ -265,7 +268,7 @@ contexts:
       push:
         - meta_scope: meta.interface.monkey2
         - include: body-interface
-        - match: (([Ii]nterface)\s+([A-Z]\w+))
+        - match: (([Ii]nterface)\s+([A-Za-z]\w+))
           scope: meta.interface.identifier.monkey2
           captures:
             2: keyword.monkey2
@@ -280,7 +283,7 @@ contexts:
 
             - match: (?i:extends)
               scope: keyword.monkey2
-            - match: ([A-Z]\w+)
+            - match: ([A-Za-z]\w+)
               scope: entity.other.inherited-class.monkey2
 
             - match: $
@@ -320,7 +323,7 @@ contexts:
     - match: (?=[Mm]ethod)
       push:
         - meta_scope: meta.method.monkey2
-        - match: ([Mm]ethod)\s+([A-Z]\w+)
+        - match: ([Mm]ethod)\s+([A-Za-z]\w+)
           scope: meta.method.identifier.monkey2
           captures:
             1: keyword.monkey2
@@ -369,7 +372,7 @@ contexts:
       push:
         - meta_scope: meta.property.monkey2
         - include: body-property
-        - match: ([Pp]roperty)\s+([A-Z]\w*)
+        - match: ([Pp]roperty)\s+([A-Za-z]\w*)
           scope: meta.property.identifier.monkey2
           captures:
             1: keyword.monkey2
@@ -401,11 +404,11 @@ contexts:
       scope: support.function.debug.monkey2
 
     # gc
-    - match: \b(?i:GCCollect)\b
+    - match: \b(GCCollect)\b
       scope: support.function.gc.monkey2
 
     # math
-    - match: \b(?i:Acos|ASin|ATan|ATan2|Abs|Ceil|Clamp|Cos|Exp|Floor|Log|Log10|Log2|Max|Min|Pow|Round|Sgn|Sin|Sqrt|Tan)\b
+    - match: \b(Acos|ASin|ATan|ATan2|Abs|Ceil|Clamp|Cos|Exp|Floor|Log|Log10|Log2|Max|Min|Pow|Round|Sgn|Sin|Sqrt|Tan)\b
       scope: support.function.math.monkey2
     - match: \b(TwoPi|Pi)\b
       scope: constant.math.monkey2
