@@ -52,10 +52,16 @@ contexts:
 
   body-interface:
     - include: modules
+    - include: comments
     - match: ([Mm]ethod)\s+([A-Za-z]\w+)
       captures:
         1: keyword.monkey2
         2: entity.name.class.monkey2
+    - match: ([Pp]roperty)\s+([A-Za-z]\w+)
+      captures:
+        1: keyword.monkey2
+        2: entity.name.class.monkey2
+
     - include: def-parameters
 
   body-lambda:
@@ -273,7 +279,6 @@ contexts:
           captures:
             2: keyword.monkey2
             3: entity.name.class.monkey2
-#            5: storage.type.class.monkey2
 
         # interface can extend multiple interfaces
 
