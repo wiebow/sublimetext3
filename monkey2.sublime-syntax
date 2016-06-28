@@ -97,6 +97,9 @@ contexts:
     - include: numerics
     - include: operators
     - include: strings
+    - match: \)
+      scope: invalid.illegal.stray-bracket-end
+
 
   parameters:
     - include: def-lambda
@@ -164,7 +167,6 @@ contexts:
       scope: constant.language.monkey2
     - match: \b([A-Z0-9_]+)\b
       scope: constant.language.monkey2
-#      scope: support.constant.input.monkey2
 
   comments:
     - match: "'.*$"
@@ -261,6 +263,8 @@ contexts:
             2: entity.name.function.monkey2
 
         - include: def-parameters
+
+
         - include: body-function
 
         - match: \b(?i:end\s+function|end)\b
@@ -352,7 +356,6 @@ contexts:
         - meta_scope: meta.parameters.monkey2
         - include: parameters
         - include: def-parameters
-
         - match: \)
           scope: punctuation.section.parameters.end.monkey2
           pop: true
