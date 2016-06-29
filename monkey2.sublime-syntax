@@ -5,13 +5,9 @@
 # http://regextutorials.com/index.html
 
 # assumptions:
-# Class and function names: PascalCase
-# field and variable names: camelCase or _camelCase
-# custom class definition: Name:Class
-# contant: ALL_CAPS13
+# contants: ALL_CAPS13!
 
-# if blocks MUST be closed with endif, otherwise it clashes with other blocks
-# that use END to close.
+# _if_ blocks MUST be closed with _endif_, otherwise it clashes with other block end that use END to close.
 # if-end if blocks are not defined, as they can also be a single line structure
 
 
@@ -77,6 +73,7 @@ contexts:
     - include: language
     - include: modules
     - include: variables
+    - include: def-parameters
     - match: \b(?i:Setter|Return)\b
       scope: keyword.monkey2
     - match: \b(?i:Override|Virtual|Final)\b
@@ -123,9 +120,9 @@ contexts:
       scope: keyword.control.monkey2
       push:
         - meta_scope: meta.selectblock.monkey2
+        - include: def-parameters
         - include: language
         - include: modules
-        - include: parameters
         - include: variables
 
         - match: \b(?i:End\s+Select|End)\b
