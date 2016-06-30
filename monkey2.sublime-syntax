@@ -94,6 +94,7 @@ contexts:
     - include: numerics
     - include: operators
     - include: strings
+    - include: def-parameters
     - match: \)
       scope: invalid.illegal.stray-bracket-end
 
@@ -120,7 +121,6 @@ contexts:
       scope: keyword.control.monkey2
       push:
         - meta_scope: meta.selectblock.monkey2
-        - include: def-parameters
         - include: language
         - include: modules
         - include: variables
@@ -186,7 +186,6 @@ contexts:
     - match: (?=[Cc]lass|[Ss]truct)
       push:
         - meta_scope: meta.class.monkey2
-        - include: def-parameters
         - include: body-class
 
         - match: (([Cc]lass|[Ss]truct)\s+([A-Za-z]\w+))
@@ -258,9 +257,6 @@ contexts:
           captures:
             1: keyword.monkey2
             2: entity.name.function.monkey2
-
-        - include: def-parameters
-
 
         - include: body-function
 
@@ -336,7 +332,6 @@ contexts:
             2: entity.name.method.monkey2
 
         - include: body-method
-        - include: def-parameters
 
         - match: \b(?i:end\s+method|end)\b
           scope: punctuation.section.method.end.monkey2
