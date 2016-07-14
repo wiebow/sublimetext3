@@ -111,6 +111,10 @@ contexts:
     - match: \b(?i:Else|New)\b
       scope: keyword.monkey2
 
+    # to enable multi line parameters with comments at the end of each line.
+    - match: "'.*$"
+      scope: comment.line.monkey2
+
 # ----------
 
   # select-blocks can contain select-blocks
