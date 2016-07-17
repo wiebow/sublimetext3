@@ -23,7 +23,7 @@ contexts:
     - include: def-function
     - include: def-interface
     - include: def-struct
-    - include: block-extern     #not working correctly yet!
+    - include: block-extern
     - include: language
     - include: modules
 
@@ -141,7 +141,13 @@ contexts:
       push:
         - meta_scope: meta.externblock.monkey2
 
-        # needs include!! or limited keywords
+        - include: language
+        - include: def-class
+        - include: modules
+        - include: variables
+
+        - match: \b(?i:Function)
+          scope: keyword.monkey2
 
         - match: \b(?i:Public|Private)\b
           scope: punctuation.section.externblock.end.monkey2
@@ -235,7 +241,7 @@ contexts:
           pop: true
 
   def-enum:
-    - match: (?=[Ee]num)
+    - match: \b(?=[Ee]num)\b
       push:
         - meta_scope: meta.enum.monkey2
         - include: body-enum
