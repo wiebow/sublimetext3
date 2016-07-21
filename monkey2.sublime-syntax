@@ -49,6 +49,7 @@ contexts:
   body-interface:
     - include: modules
     - include: comments
+    - include: block-comments
     - match: ([Mm]ethod)\s+([A-Za-z]\w+)
       captures:
         1: keyword.monkey2
@@ -87,6 +88,7 @@ contexts:
   language:
     - include: block-select
     - include: block-try
+    - include: block-comments
     - include: comments
     - include: constants
     - include: keywords
@@ -117,23 +119,18 @@ contexts:
 
 # ----------
 
-  # select-blocks can contain select-blocks
-  # so block selection is a bit different here, we must
-  # absorb the keyword right away
-  block-select:
-    - match: ([Ss]elect)
-      scope: keyword.control.monkey2
+  block-comments:
+    - match: (?i:#rem)
       push:
-        - meta_scope: meta.selectblock.monkey2
-        - include: language
-        - include: modules
-        - include: variables
+      - meta_scope: comment.block.monkey2
 
-        - match: \b(?i:End\s+Select|End)\b
-          scope: punctuation.section.selectblock.end.monkey2
-          captures:
-            0: keyword.control.monkey2
-          pop: true
+      - match: (@param|@return|@hidden|monkeydoc)
+        scope: constant.language.monkey2
+
+      - include: block-comments
+
+      - match: (?i:#end)
+        pop: true
 
   block-extern:
     - match: ([Ee]xtern)
@@ -151,6 +148,24 @@ contexts:
 
         - match: \b(?i:Public|Private)\b
           scope: punctuation.section.externblock.end.monkey2
+          captures:
+            0: keyword.control.monkey2
+          pop: true
+
+  # select-blocks can contain select-blocks
+  # so block selection is a bit different here, we must
+  # absorb the keyword right away
+  block-select:
+    - match: ([Ss]elect)
+      scope: keyword.control.monkey2
+      push:
+        - meta_scope: meta.selectblock.monkey2
+        - include: language
+        - include: modules
+        - include: variables
+
+        - match: \b(?i:End\s+Select|End)\b
+          scope: punctuation.section.selectblock.end.monkey2
           captures:
             0: keyword.control.monkey2
           pop: true
@@ -179,15 +194,6 @@ contexts:
     - match: "'.*$"
       scope: comment.line.monkey2
 
-    - match: (?i:#rem)
-      push:
-      - meta_scope: comment.block.monkey2
-
-      - match: (@param|@return|@hidden|monkeydoc)
-        scope: constant.language.monkey2
-
-      - match: (?i:#end)
-        pop: true
 
   # merged class and struct!!
   # is this right? can structs be extended?
