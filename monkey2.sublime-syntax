@@ -156,7 +156,7 @@ contexts:
   # so block selection is a bit different here, we must
   # absorb the keyword right away
   block-select:
-    - match: ([Ss]elect)
+    - match: \b([Ss]elect)\b
       scope: keyword.control.monkey2
       push:
         - meta_scope: meta.selectblock.monkey2
@@ -171,7 +171,7 @@ contexts:
           pop: true
 
   block-try:
-    - match: ([Tt]ry)
+    - match: \b([Tt]ry)\b
       scope: keyword.control.monkey2
       push:
         - meta_scope: meta.tryblock.monkey2
@@ -199,7 +199,7 @@ contexts:
   # is this right? can structs be extended?
 
   def-class:
-    - match: (?=[Cc]lass|[Ss]truct)
+    - match: \b(?=[Cc]lass|[Ss]truct)\b
       push:
         - meta_scope: meta.class.monkey2
         - include: body-class
