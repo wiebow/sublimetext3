@@ -48,7 +48,7 @@ contexts:
 
   body-interface:
     - include: modules
-    - include: comments
+    - include: line-comments
     - include: block-comments
     - match: ([Mm]ethod)\s+([A-Za-z]\w+)
       captures:
@@ -89,7 +89,7 @@ contexts:
     - include: block-select
     - include: block-try
     - include: block-comments
-    - include: comments
+    - include: line-comments
     - include: constants
     - include: keywords
     - include: monkey-functions
@@ -100,7 +100,6 @@ contexts:
     - match: \)
       scope: invalid.illegal.stray-bracket-end
 
-
   parameters:
     - include: def-lambda
     - include: constants
@@ -110,12 +109,9 @@ contexts:
     - include: strings
     - include: variables
     - include: monkey-functions
+    - include: line-comments
     - match: \b(?i:Else|New)\b
       scope: keyword.monkey2
-
-    # to enable multi line parameters with comments at the end of each line.
-    - match: "'.*$"
-      scope: comment.line.monkey2
 
 # ----------
 
@@ -190,7 +186,7 @@ contexts:
     - match: \b([A-Z0-9_]+)\b
       scope: constant.language.monkey2
 
-  comments:
+  line-comments:
     - match: "'.*$"
       scope: comment.line.monkey2
 
@@ -399,7 +395,6 @@ contexts:
             0: keyword.monkey2
           pop: true
 
-
   keywords:
     - match: \b(?i:import|using|namespace|extern|alias|new)\b
       scope: keyword.monkey2
@@ -408,15 +403,15 @@ contexts:
     - match: \b(?i:case|catch|continue|default|delete|end\s*if|eachin|else|elseif|exit|for|forever|if|next|private|public|repeat|return|step|then|throw|try|to|until|wend|while)\b
       scope: keyword.control.monkey2
 
-
   modules:
     - include: module-monkey
     - include: module-std
     - include: module-mojo
+    - include: module-mojox
 
   module-monkey:
     # debug
-    - match: \b(Assert|DebugAssert|GetDebugStack|DebugLog)\b
+    - match: \b(Assert|DebugAssert|GetDebugStack|DebugLog|DebugStop|RuntimeError)\b
       scope: support.function.debug.monkey2
 
     # gc
@@ -436,6 +431,12 @@ contexts:
       scope: interface.types.monkey2
 
   module-std:
+    # audio
+    - match: \b(AudioFormat|AudioData)\b
+      scope: support.class.audio.monkey2
+    - match: \b(?i:BytesPerSample|LoadAudioData_OGG|LoadAudioData_WAV)\b
+      scope: support.function.audio.monkey2
+
     # collections
     - match: \b(FloatList|FloatStack|IntList|IntStack|StringList|StringStack|FloatMap|IntMap|List|Map|Stack|StringMap)\b
       scope: support.class.collections.monkey2
@@ -468,6 +469,10 @@ contexts:
     - match: \b(JsonArray|JsonBool|JsonError|JsonNumber|JsonObject|JsonParser|JsonString|JsonValue)\b
       scope: support.class.json.monkey2
 
+    # jsonify
+    - match: \b(ToJson|ToRecti)\b
+      scope: support.function.jsonify.monkey2
+
     # memory
     - match: \b(ByteOrder|DataBuffer)\b
       scope: support.class.memory.monkey2
@@ -481,18 +486,20 @@ contexts:
       scope: support.class.stream.monkey2
 
     # stringio
-    - match: \b(?i:Hex|LoadString|SaveString)\b
+    - match: \b(?i:IsAlpha|IsDigit|IsHexDigit|IsIdent|IsSpace|LoadString|SaveString|StringToULong|ULongToString)\b
       scope: support.function.stringio.monkey2
 
     # time
     - match: \b(Microsecs|Millisecs)\b
       scope: support.function.time.monkey2
 
+    # zipfile
+    - match: \b(ExtractZip)\b
+      scope: support.function.zipfile.monkey2
 
   module-mojo:
-
     # app
-    - match: \b(EventType|WindowFlags|AppInstance|Event|KeyEvent|MouseEvent|Skin|Style|View|Window|WindowEvent)\b
+    - match: \b(EventType|WindowFlags|AppInstance|Event|GLWindow|KeyEvent|MouseEvent|Skin|Style|View|Window|WindowEvent)\b
       scope: support.class.app.monkey2
     - match: \b(App)\b
       scope: support.variable.language.monkey2
@@ -525,6 +532,11 @@ contexts:
     - match: \b(Timer)\b
       scope: support.class.timer.monkey2
 
+  module-mojox:
+    - match: \b(TabViewFlags|Action|Button|CheckButton|CheckGroup|Console|Dialog|DockingView|FileBrowser|HtmlView|Label|Menu|MenuBar|ProgressBar|ProgressDialog|PushButton|ScrollBar|ScrollView|TabView|TableView|TextDialog|TextDocument|TextField|TextView|ToolBar|ToolButton|TreeView|document_container)\b
+      scope: support.class.mojox.monkey2
+    - match: \b(?i:Alert|RequestOkay|RequestString)\b
+      scope: support.function.mojox.monkey2
 
   monkey-functions:
     - match: \b(?i:Print|Cast)\b
@@ -570,5 +582,5 @@ contexts:
         pop: true
 
   variables:
-    - match: \b(?i:self|super)\b
+    - match: \b(?i:Self|Super)\b
       scope: variable.language.monkey2
