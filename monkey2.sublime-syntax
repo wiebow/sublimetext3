@@ -7,8 +7,8 @@
 # assumptions:
 # contants: ALL_CAPS13!
 
-# _if_ blocks MUST be closed with _endif_, otherwise it clashes with other block end that use END to close.
-# if-end if blocks are not defined, as they can also be a single line structure
+# single line IF blocks **must** use the keyword THEN. If this is not done,
+# the if block is not closed properly.
 
 
 name: Monkey2
@@ -26,6 +26,7 @@ contexts:
     - include: block-extern
     - include: language
     - include: modules
+    - include: variables
 
   body-class:
     - include: def-enum
@@ -40,10 +41,12 @@ contexts:
   body-enum:
     - include: language
     - include: modules
+    - include: variables
 
   body-function:
     - include: language
     - include: modules
+    - include: variables
     - include: def-lambda
 
   body-interface:
@@ -64,6 +67,7 @@ contexts:
   body-lambda:
     - include: language
     - include: modules
+    - include: variables
 
   body-method:
     - include: language
@@ -84,11 +88,13 @@ contexts:
     - include: def-parameters
     - include: language
     - include: modules
+    - include: variables
 
   language:
     - include: block-select
     - include: block-try
     - include: block-comments
+    - include: block-if
     - include: line-comments
     - include: constants
     - include: keywords
@@ -128,6 +134,21 @@ contexts:
       - match: (?i:#end)
         pop: true
 
+  block-if:
+    - match: \b([Ii]f)\b
+      scope: keyword.control.monkey2
+      push:
+        - meta_scope: meta.ifblock.monkey2
+        - include: language
+        - include: modules
+        - include: variables
+
+        - match: \b(?i:End\s*If|End|Then)\b
+          scope: punctuation.section.ifblock.end.monkey2
+          captures:
+            0: keyword.control.monkey2
+          pop: true
+
   block-extern:
     - match: ([Ee]xtern)
       scope: keyword.control.monkey2
@@ -135,9 +156,9 @@ contexts:
         - meta_scope: meta.externblock.monkey2
 
         - include: language
-        - include: def-class
         - include: modules
         - include: variables
+        - include: def-class
 
         - match: \b(?i:Function)
           scope: keyword.monkey2
@@ -173,6 +194,7 @@ contexts:
         - meta_scope: meta.tryblock.monkey2
         - include: language
         - include: modules
+        - include: variables
 
         - match: \b(?i:End\s+Try|End)\b
           scope: punctuation.section.tryblock.end.monkey2
@@ -400,7 +422,9 @@ contexts:
       scope: keyword.monkey2
     - match: \b(?i:local|global|const)\b
       scope: keyword.monkey2
-    - match: \b(?i:case|catch|continue|default|delete|end\s*if|eachin|else|elseif|exit|for|forever|if|next|private|public|repeat|return|step|then|throw|try|to|until|wend|while)\b
+#    - match: \b(?i:case|catch|continue|default|delete|end\s*if|eachin|else|elseif|exit|for|forever|if|next|private|public|repeat|return|step|then|throw|try|to|until|wend|while)\b
+
+    - match: \b(?i:case|catch|continue|default|delete|eachin|else|elseif|exit|for|forever|next|private|public|repeat|return|step|throw|try|to|until|wend|while)\b
       scope: keyword.control.monkey2
 
   modules:
