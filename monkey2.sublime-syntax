@@ -22,12 +22,23 @@ contexts:
     - include: def-enum
     - include: def-function
     - include: def-interface
+    - include: def-struct
     - include: block-extern
     - include: language
     - include: modules
     - include: variables
 
   body-class:
+    - include: def-enum
+    - include: def-function
+    - include: def-method
+    - include: def-property
+    - include: def-operator
+    - include: language
+    - include: modules
+    - include: variables
+
+  body-struct:
     - include: def-enum
     - include: def-function
     - include: def-method
@@ -154,19 +165,20 @@ contexts:
       push:
         - meta_scope: meta.externblock.monkey2
 
+        - match: \b(Public|Private)\b
+          scope: punctuation.section.externblock.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
         - include: language
         - include: modules
         - include: variables
         - include: def-class
 
         - match: \b(?i:Function)
-          scope: keyword.monkey2
+          scope: keyword.control.monkey2
 
-        - match: \b(?i:Public|Private)\b
-          scope: punctuation.section.externblock.end.monkey2
-          captures:
-            0: keyword.control.monkey2
-          pop: true
 
   # select-blocks can contain select-blocks
   # so block selection is a bit different here, we must
@@ -211,17 +223,13 @@ contexts:
     - match: "'.*$"
       scope: comment.line.monkey2
 
-
-  # merged class and struct!!
-  # is this right? can structs be extended?
-
   def-class:
-    - match: \b(?=[Cc]lass|[Ss]truct)\b
+    - match: \b(?=[Cc]lass)\b
       push:
         - meta_scope: meta.class.monkey2
         - include: body-class
 
-        - match: (([Cc]lass|[Ss]truct)\s+([A-Za-z]\w+))
+        - match: (([Cc]lass)\s+([A-Za-z]\w+))
           scope: meta.class.identifier.monkey2
           captures:
             2: keyword.monkey2
@@ -230,9 +238,6 @@ contexts:
         - match: \b(?i:abstract|extension|virtual|final|field|protected|static)\b
           scope: keyword.monkey2
 
-        # one extend
-        # also added lower case class name.
-
         - match: \b(?i:extends)\s+([A-Za-z]\w+)\b
           scope: meta.class.modifier.monkey2
           captures:
@@ -240,28 +245,49 @@ contexts:
             1: entity.other.inherited-class.monkey2
 
         # multiple interfaces possible
-        # so using a block and using extends to pop
+        # so using a block and using extend, modifiers and EOL to pop
 
         - match: (?=[Ii]mplements)
           push:
             - meta_scope: meta.interface.extend.monkey2
+
+            - match: (?=[Ee]xtends|[Aa]bstract|[Ff]inal|$)
+              scope: punctuation.section.interface.end.monkey2
+              pop: true
 
             - match: (?i:Implements)
               scope: keyword.monkey2
             - match: ([A-Za-z]\w+)
               scope: entity.other.inherited-class.monkey2
 
-            - match: (?=[Ee]xtends|$)
-              scope: punctuation.section.interface.end.monkey2
-              pop: true
 
-        # how this class definition ends
-
-        - match: \b(?i:end\s+class|end\s+struct|end)\b
+        - match: \b(?i:end\s+class|end)\b
           scope: punctuation.section.class.end.monkey2
           captures:
             0: keyword.monkey2
           pop: true
+
+  def-struct:
+    - match: \b(?=[Ss]truct)\b
+      push:
+        - meta_scope: meta.struct.monkey2
+        - include: body-class
+
+        - match: (([Ss]truct)\s+([A-Za-z]\w+))
+          scope: meta.class.identifier.monkey2
+          captures:
+            2: keyword.monkey2
+            3: entity.name.class.monkey2
+
+        - match: \b(?i:abstract|extension|final|field|protected|static)\b
+          scope: keyword.monkey2
+
+        - match: \b(?i:end\s+struct|end)\b
+          scope: punctuation.section.struct.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
 
   def-enum:
     - match: \b(?=[Ee]num)\b
@@ -304,6 +330,7 @@ contexts:
       push:
         - meta_scope: meta.interface.monkey2
         - include: body-interface
+
         - match: (([Ii]nterface)\s+([A-Za-z]\w+))
           scope: meta.interface.identifier.monkey2
           captures:
@@ -387,11 +414,11 @@ contexts:
           pop: true
 
   def-operator:
-    - match: (?=[Oo]perator)
+    - match: (?=[Oo]perator|[Oo]perator [Tt]o)
       push:
         - meta_scope: meta.operator.monkey2
         - include: body-operator
-        - match: ([Oo]perator)
+        - match: ([Oo]perator [To])
           scope: meta.operator.identifier.monkey2
           captures:
             1: keyword.monkey2
@@ -406,11 +433,13 @@ contexts:
       push:
         - meta_scope: meta.property.monkey2
         - include: body-property
+
         - match: ([Pp]roperty)\s+([A-Za-z]\w*)
           scope: meta.property.identifier.monkey2
           captures:
             1: keyword.monkey2
             2: entity.name.property.monkey2
+
         - match: \b(?i:end\s+property|end)\b
           scope: punctuation.section.property.end.monkey2
           captures:
