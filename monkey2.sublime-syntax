@@ -22,7 +22,6 @@ contexts:
     - include: def-enum
     - include: def-function
     - include: def-interface
-    - include: def-struct
     - include: block-extern
     - include: language
     - include: modules
@@ -228,7 +227,7 @@ contexts:
             2: keyword.monkey2
             3: entity.name.class.monkey2
 
-        - match: \b(?i:abstract|virtual|final|field|protected|static)\b
+        - match: \b(?i:abstract|extension|virtual|final|field|protected|static)\b
           scope: keyword.monkey2
 
         # one extend
@@ -365,6 +364,9 @@ contexts:
             1: keyword.monkey2
             2: entity.name.method.monkey2
 
+        - match: \b(?i:abstract|final|override|virtual)\b
+          scope: keyword.monkey2
+
         - include: body-method
 
         - match: \b(?i:end\s+method|end)\b
@@ -373,8 +375,6 @@ contexts:
             0: keyword.monkey2
           pop: true
 
-        - match: \b(?i:abstract|final|override|virtual)\b
-          scope: keyword.monkey2
 
   def-parameters:
     - match: \(
@@ -443,7 +443,7 @@ contexts:
       scope: support.function.gc.monkey2
 
     # math
-    - match: \b(Acos|ASin|ATan|ATan2|Abs|Ceil|Clamp|Cos|Exp|Floor|Log|Log10|Log2|Max|Min|Pow|Round|Sgn|Sin|Sqrt|Tan)\b
+    - match: \b(ACos|ASin|ATan|ATan2|Abs|Ceil|Clamp|Cos|Exp|Floor|Log|Log10|Log2|Max|Min|Pow|Round|Sgn|Sin|Sqrt|Tan)\b
       scope: support.function.math.monkey2
     - match: \b(TwoPi|Pi)\b
       scope: constant.math.monkey2
@@ -501,6 +501,10 @@ contexts:
     - match: \b(ByteOrder|DataBuffer)\b
       scope: support.class.memory.monkey2
 
+    # process
+    - match: \b(Process)\b
+      scope: support.class.process.monkey2
+
     # random
     - match: \b(Rnd|RndULong|SeedRnd)\b
       scope: support.function.random.monkey2
@@ -516,6 +520,10 @@ contexts:
     # time
     - match: \b(Microsecs|Millisecs)\b
       scope: support.function.time.monkey2
+
+    # timer
+    - match: \b(Timer)\b
+      scope: support.class.timer.monkey2
 
     # zipfile
     - match: \b(ExtractZip)\b
@@ -544,17 +552,11 @@ contexts:
     - match: \b(Keyboard|Mouse)\b
       scope: support.constant.input.monkey2
 
-    # process
-    - match: \b(Process)\b
-      scope: support.class.process.monkey2
-
     # requesters
     - match: \b(?i:Confirm|Notify|Proceed|RequestDir|RequestFile)\b
       scope: support.function.requesters.monkey2
 
-    # timer
-    - match: \b(Timer)\b
-      scope: support.class.timer.monkey2
+
 
   module-mojox:
     - match: \b(TabViewFlags|Action|Button|CheckButton|CheckGroup|Console|Dialog|DockingView|FileBrowser|HtmlView|Label|Menu|MenuBar|ProgressBar|ProgressDialog|PushButton|ScrollBar|ScrollView|TabView|TableView|TextDialog|TextDocument|TextField|TextView|ToolBar|ToolButton|TreeView|document_container)\b
