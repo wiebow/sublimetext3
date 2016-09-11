@@ -1,0 +1,23 @@
+<snippet>
+	<content><![CDATA[
+#Import "<std>"
+#Import "<mojo>"
+#Import "<wdw-game2d>"
+
+Using std..
+Using mojo..
+Using wdw.game2d
+
+Function Main:Void()
+	New AppInstance
+	New ${2:MyGame}
+	App.Run()
+End Function
+
+Class ${2:MyGame} Extends Game2d
+	${3:}
+End Class
+]]></content>
+	<tabTrigger>game2d-boilerplate</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

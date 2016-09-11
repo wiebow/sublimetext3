@@ -1,0 +1,10 @@
+<snippet>
+	<content><![CDATA[
+Property ( ${1:name}:${2:type} )
+	${3:field} = ${4:value}
+End
+$0
+]]></content>
+	<tabTrigger>property write</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

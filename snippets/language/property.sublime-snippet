@@ -7,6 +7,6 @@ Setter( ${4:value}:${2:type} )
 End
 $0
 ]]></content>
-	<tabTrigger>property</tabTrigger>
-	<scope>meta.class.monkey2</scope>
+	<tabTrigger>property read/write</tabTrigger>
+	<scope>source.monkey2</scope>
 </snippet>

@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+#Rem monkeydoc
+#End
+Enum ${1:name}
+	$0
+End Enum
+]]></content>
+	<tabTrigger>enum</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

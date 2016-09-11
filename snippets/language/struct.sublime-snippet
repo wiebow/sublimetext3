@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+#Rem monkeydoc
+#End
+Struct ${1:StructName}
+	$0
+End Struct
+]]></content>
+	<tabTrigger>struct</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>

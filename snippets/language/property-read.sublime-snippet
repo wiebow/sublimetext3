@@ -1,0 +1,10 @@
+<snippet>
+	<content><![CDATA[
+Property ${1:name}:${2:type}()
+	Return ${3:field}
+End
+$0
+]]></content>
+	<tabTrigger>property read</tabTrigger>
+	<scope>source.monkey2</scope>
+</snippet>
