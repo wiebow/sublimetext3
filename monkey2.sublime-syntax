@@ -177,7 +177,7 @@ contexts:
         - include: def-class
 
         - match: \b(?i:Function)
-          scope: keyword.control.monkey2
+          scope: keyword.monkey2
 
 
   # select-blocks can contain select-blocks
@@ -418,7 +418,7 @@ contexts:
       push:
         - meta_scope: meta.operator.monkey2
         - include: body-operator
-        - match: ([Oo]perator [To])
+        - match: ([Oo]perator|[Oo]perator [Tt]o)
           scope: meta.operator.identifier.monkey2
           captures:
             1: keyword.monkey2
@@ -434,7 +434,7 @@ contexts:
         - meta_scope: meta.property.monkey2
         - include: body-property
 
-        - match: ([Pp]roperty)\s+([A-Za-z]\w*)
+        - match: ([Pp]roperty)(\s+([A-Za-z]\w*))?
           scope: meta.property.identifier.monkey2
           captures:
             1: keyword.monkey2
@@ -449,9 +449,9 @@ contexts:
   keywords:
     - match: \b(?i:import|using|namespace|extern|alias|new)\b
       scope: keyword.monkey2
+
     - match: \b(?i:local|global|const)\b
       scope: keyword.monkey2
-#    - match: \b(?i:case|catch|continue|default|delete|end\s*if|eachin|else|elseif|exit|for|forever|if|next|private|public|repeat|return|step|then|throw|try|to|until|wend|while)\b
 
     - match: \b(?i:case|catch|continue|default|delete|eachin|else|elseif|exit|for|forever|next|private|public|repeat|return|step|throw|try|to|until|wend|while)\b
       scope: keyword.control.monkey2
@@ -585,8 +585,6 @@ contexts:
     - match: \b(?i:Confirm|Notify|Proceed|RequestDir|RequestFile)\b
       scope: support.function.requesters.monkey2
 
-
-
   module-mojox:
     - match: \b(TabViewFlags|Action|Button|CheckButton|CheckGroup|Console|Dialog|DockingView|FileBrowser|HtmlView|Label|Menu|MenuBar|ProgressBar|ProgressDialog|PushButton|ScrollBar|ScrollView|TabView|TableView|TextDialog|TextDocument|TextField|TextView|ToolBar|ToolButton|TreeView|document_container)\b
       scope: support.class.mojox.monkey2
@@ -596,8 +594,6 @@ contexts:
   monkey-functions:
     - match: \b(?i:Print|Cast)\b
       scope: entity.name.function.monkey2
-#    - match: \b(?i:IsAlpha|IsDigit|IsHexDigit|IsIdent|IsSpace)\b
-#      scope: function.chartype.monkey2
     - match: \b(?i:MarkdownToHtml)\b
       scope: function.markdown.monkey2
 
@@ -614,7 +610,7 @@ contexts:
   operators:
      - match: (:=|=|\b[Pp]tr\b)
        scope: keyword.operator.assignment.monkey2
-     - match: (-=|\*=|~=|/=|\+=|&=|(?i):Shl|(?i):Shr|(?i):Mod\b|:\|)
+     - match: (-=|-:|\*=|\*:|~=|/=|/:|\+=|\+:|&=|(?i):Shl|(?i):Shr|(?i):Mod\b|:\|)
        scope: keyword.operator.arithmetic.monkey2
      - match: (-|\*|~|/|\+|&|(?i)Shl|(?i)Shr|(?i)Mod |\|)
        scope: keyword.operator.arithmetic.monkey2
