@@ -229,7 +229,7 @@ contexts:
         - meta_scope: meta.class.monkey2
         - include: body-class
 
-        - match: (([Cc]lass)\s+([A-Za-z]\w+))
+        - match: (([Cc]lass)\s+([A-Za-z]\w*))
           scope: meta.class.identifier.monkey2
           captures:
             2: keyword.monkey2
@@ -273,7 +273,7 @@ contexts:
         - meta_scope: meta.struct.monkey2
         - include: body-class
 
-        - match: (([Ss]truct)\s+([A-Za-z]\w+))
+        - match: (([Ss]truct)\s+([A-Za-z]\w*))
           scope: meta.class.identifier.monkey2
           captures:
             2: keyword.monkey2
@@ -287,7 +287,6 @@ contexts:
           captures:
             0: keyword.monkey2
           pop: true
-
 
   def-enum:
     - match: \b(?=[Ee]num)\b
@@ -307,7 +306,7 @@ contexts:
           pop: true
 
   def-function:
-    - match: (?=[Ff]unction)
+    - match: (?=[Ff]unction\s+([A-Za-z]\w+))
       push:
         - meta_scope: meta.function.monkey2
 
@@ -326,7 +325,7 @@ contexts:
           pop: true
 
   def-interface:
-    - match: (?=[Ii]nterface)
+    - match: (?=[Ii]nterface\s+([A-Za-z]\w+))
       push:
         - meta_scope: meta.interface.monkey2
         - include: body-interface
@@ -382,7 +381,7 @@ contexts:
         - include: body-lambda
 
   def-method:
-    - match: (?=[Mm]ethod)
+    - match: (?=[Mm]ethod\s+([A-Za-z]\w+))
       push:
         - meta_scope: meta.method.monkey2
         - match: ([Mm]ethod)\s+([A-Za-z]\w+)
