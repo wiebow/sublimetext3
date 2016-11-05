@@ -477,7 +477,7 @@ contexts:
       scope: constant.math.monkey2
 
     # types
-    - match: \b(?i:Array|Bool|Byte|Double|Float|Int|Long|Null|Short|String|UByte|UInt|ULong|UShort|CString|Utf8String|Void|WString|Exception|Object|Throwable)\b
+    - match: \b(?i:Array|Bool|Byte|Double|Float|Int|Long|Null|Short|String|UByte|UInt|ULong|UShort|CString|Utf8String|Variant|Void|WString|Exception|Object|Throwable|TypeInfo|DeclInfo)\b
       scope: storage.type.class.monkey2
     - match: \b(?i:IIntegral|INumeric|IReal)\b
       scope: interface.types.monkey2
@@ -617,6 +617,8 @@ contexts:
        scope: keyword.operator.comparison.monkey2
      - match: \b(?i:And|Not|Or)\b
        scope: keyword.operator.logical.monkey2
+     - match: \bTypeof\b
+       scope: keyword.operator.reflection.monkey2
 
   storage-modifiers:
     - match: \b(?i:final|abstract|extends|implements|override)\b
