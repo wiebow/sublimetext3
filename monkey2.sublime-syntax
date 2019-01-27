@@ -6,6 +6,7 @@
 
 # assumptions:
 # contants: ALL_CAPS13!
+# enums are constants
 
 # single line IF blocks **must** use the keyword THEN. If this is not done,
 # the if block is not closed properly.
@@ -357,7 +358,6 @@ contexts:
             0: keyword.monkey2
           pop: true
 
-
   # lambda: essentially the same as functions
   # except no name
 
@@ -400,7 +400,6 @@ contexts:
           captures:
             0: keyword.monkey2
           pop: true
-
 
   def-parameters:
     - match: \(
@@ -446,7 +445,7 @@ contexts:
           pop: true
 
   keywords:
-    - match: \b(?i:import|using|namespace|extern|alias|new)\b
+    - match: \b(?i:import|using|namespace|extern|alias|new|reflect)\b
       scope: keyword.monkey2
 
     - match: \b(?i:local|global|const)\b
@@ -460,6 +459,18 @@ contexts:
     - include: module-std
     - include: module-mojo
     - include: module-mojox
+    - include: module-mojo3d
+    - include: module-httprequest
+    - include: module-reflection
+    - include: module-theoraplayer
+
+  module-httprequest:
+    - match: \b(ReadyState)\b
+      scope: support.constant.httprequest.monkey2
+    - match: \b(HttpRequest|HttpRequestBase)\b
+      scope: support.class.httprequest.monkey2
+    - match: \b(Hello)\b
+      scope: support.function.httprequest.monkey2
 
   module-monkey:
     # debug
@@ -467,7 +478,7 @@ contexts:
       scope: support.function.debug.monkey2
 
     # gc
-    - match: \b(GCCollect)\b
+    - match: \b(GCCollect|GCFree|GCMalloc|GCResume|GCSetTrigger|GCSuspend)\b
       scope: support.function.gc.monkey2
 
     # math
@@ -477,7 +488,7 @@ contexts:
       scope: constant.math.monkey2
 
     # types
-    - match: \b(?i:Array|Bool|Byte|Double|Float|Int|Long|Null|Short|String|UByte|UInt|ULong|UShort|CString|Utf8String|Variant|Void|WString|Exception|Object|Throwable|TypeInfo|DeclInfo)\b
+    - match: \b(?i:Array|Bool|Byte|Double|Float|Int|Long|Null|Short|String|UByte|UInt|ULong|UShort|CString|Utf8String|Variant|Void|WString|Exception|Object|Throwable|TypeInfo|DeclInfo|WeakRef)\b
       scope: storage.type.class.monkey2
     - match: \b(?i:IIntegral|INumeric|IReal)\b
       scope: interface.types.monkey2
@@ -488,12 +499,22 @@ contexts:
       scope: support.class.audio.monkey2
     - match: \b(?i:BytesPerSample|LoadAudioData_OGG|LoadAudioData_WAV)\b
       scope: support.function.audio.monkey2
+    - match: \b(AudioFormat)\b
+      scope: support.constant.audio.monkey2
+
+    # base64
+    - match: \b(?i:DecodeBase64|EncodeBase64)\b
+      scope: support.function.base64.monkey2
 
     # collections
-    - match: \b(FloatList|FloatStack|IntList|IntStack|StringList|StringStack|FloatMap|IntMap|List|Map|Stack|StringMap)\b
+    - match: \b(FloatDeque|FloatList|FloatMap|FloatStack|IntDeque|IntList|IntMap|IntStack|StringDeque|StringList|StringMap|StringStack|Deque|List|Map|Stack)\b
       scope: support.class.collections.monkey2
     - match: \b(?i:IContainer|IIterator)\b
       scope: support.interface.collections.monkey2
+
+    # digest
+    - match: \b(?i:MD5|SHA1|SHA256)\b
+      scope: support.function.digest.monkey2
 
     # fiber
     - match: \b(Fiber|Future)\b
@@ -506,15 +527,19 @@ contexts:
       scope: support.function.filesystem.monkey2
 
     # geom
-    - match: \b(AffineMat3f|Mat3f|Mat4f|Rectf|Recti|Vec2f|Vec2i|Vec3f|Vec4f|Axis|AffineMat3|Mat3|Mat4|Rect|Vec2|Vec3|Vec4)\b
+    - match: \b(AffineMat3f|Mat3f|Mat4f|Rectf|Recti|Vec2f|Vec2i|Vec3f|Vec4f|AffineMat3|Mat3|Mat4|Rect|Vec2|Vec3|Vec4)\b
       scope: support.class.geom.monkey2
-    - match: \b(?i:TransformRecti)\b
+    - match: \b(?i:TransformRecti|TransformVec2i)\b
       scope: support.function.geom.monkey2
+    - match: \b(Axis)\b
+      scope: support.constant.geom.monkey2
 
     # graphics
+    - match: \b(PixelFormat)\b
+      scope: support.constant.graphics.monkey2
     - match: \b(PixelFormat|Color|Pixmap)\b
       scope: support.class.graphics.monkey2
-    - match: \b(?i:PixelFormatDepth)\b
+    - match: \b(?i:IsAlphaPixelFormat|IsDepthPixelFormat|IsFloatPixelFormat|PixelFormatDepth)\b
       scope: support.function.graphics.monkey2
 
     # json
@@ -526,27 +551,51 @@ contexts:
       scope: support.function.jsonify.monkey2
 
     # memory
-    - match: \b(ByteOrder|DataBuffer)\b
+    - match: \b(ByteOrder)\b
+      scope: support.constant.memory.monkey2
+    - match: \b(DataBuffer|DataStream)\b
       scope: support.class.memory.monkey2
 
     # process
-    - match: \b(Process)\b
+    - match: \b(Process|ProcessStream)\b
       scope: support.class.process.monkey2
 
     # random
     - match: \b(Rnd|RndULong|SeedRnd)\b
       scope: support.function.random.monkey2
 
+    # requesters
+    - match: \b(?i:Confirm|Notify|Proceed|RequestDir|RequestFile)\b
+      scope: support.function.requesters.monkey2
+
+    # resource
+    - match: \b(Resource)\b
+      scope: support.class.resource.monkey2
+    - match: \b(SafeDiscard)\b
+      scope: support.function.resource.monkey2
+
+    # sockets
+    - match: \b(Socket|SocketAddress|SocketStream)\b
+      scope: support.class.sockets.monkey2
+    - match: \b(SocketFlags|SocketType)\b
+      scope: support.constant.sockets.monkey2
+
     # stream
-    - match: \b(DataStream|FileStream|Stream)\b
+    - match: \b(FileStream|Stream)\b
       scope: support.class.stream.monkey2
 
     # stringio
-    - match: \b(?i:IsAlpha|IsDigit|IsHexDigit|IsIdent|IsSpace|LoadString|SaveString|StringToULong|ULongToString)\b
+    - match: \b(?i:Bin|Hex|IsAlpha|IsDigit|IsHexDigit|IsIdent|IsSpace|LoadString|SaveString|StringToULong|ULongToString)\b
       scope: support.function.stringio.monkey2
 
+    # thread
+    - match: \b(Classes|Condvar|Mutex|Semaphore|Thread)\b
+      scope: support.class.thread.monkey2
+
     # time
-    - match: \b(Microsecs|Millisecs)\b
+    - match: \b(TimeSpanTime|TimeParser)\b
+      scope: support.class.time.monkey2
+    - match: \b(Microsecs|Millisecs|Now|Sleep)\b
       scope: support.function.time.monkey2
 
     # timer
@@ -554,41 +603,79 @@ contexts:
       scope: support.class.timer.monkey2
 
     # zipfile
+    - match: \b(ZipFile)
+      scope: support.class.zipfile.monkey2
     - match: \b(ExtractZip)\b
       scope: support.function.zipfile.monkey2
 
   module-mojo:
     # app
-    - match: \b(EventType|WindowFlags|AppInstance|Event|GLWindow|KeyEvent|MouseEvent|Skin|Style|View|Window|WindowEvent)\b
+    - match: \b(EventType|WindowFlags)\b
+      scope: support.constant.app.monkey2
+    - match: \b(DisplayMode|AppInstance|Event|GLWindow|KeyEvent|MouseEvent|Skin|Style|Theme|TouchEvent|View|Window|WindowEvent)\b
       scope: support.class.app.monkey2
-    - match: \b(App)\b
-      scope: support.variable.language.monkey2
+    - match: \b(App|ResourceManager)\b
+      scope: support.class.app.monkey2
 
     # audio
-    - match: \b(AudioDevice|Channel|Sound)\b
+    - match: \b(ChannelFlags)\b
+      scope: support.constant.audio.monkey2
+    - match: \b(Audio|AudioDevice|Channel|Sound)\b
       scope: support.class.audio.monkey2
-    - match: \b(Audio)\b
-      scope: support.variable.language.monkey2
+
+      # enum = constant
+    - match: \b(ChannelFlags)\b
+      scope: support.constant.language.monkey2
 
     # graphics
-    - match: \b(BlendMode|TextureFlags|Glyph|Canvas|Font|Image|Material|Shader|Texture)\b
+    - match: \b(BlendMode|CubeFace|CullMode|DepthFunc|IndexFormat|OutlineMode|TextureFlags)\b
+      scope: support.constant.graphics.monkey2
+    - match: \b(Vertex2f|Vertex3f|AngelFont|Canvas|Font|Image|IndexBuffer|RenderTarget|Shader|ShadowCaster|Texture|UniformBlock|Vertex2fFormat|Vertex3fFormat|VertexBuffer)\b
       scope: support.class.graphics.monkey2
 
     # input
-    - match: \b(JoystickHat|Key|ModifierMouseButton|InputDevice|JoystickDevice|KeyboardDevice|MouseDevice)\b
-      scope: support.class.input.monkey2
-    - match: \b(Keyboard|Mouse)\b
+    - match: \b(JoystickHat|Key|Modifier|MouseButton|MouseCursor)\b
       scope: support.constant.input.monkey2
+    - match: \b(|Joystick|KeyboardDevice|MouseDevice|TouchDevice)\b
+      scope: support.class.input.monkey2
+    - match: \b(Keyboard|Mouse|Touch)\b
+      scope: support.class.input.monkey2
 
-    # requesters
-    - match: \b(?i:Confirm|Notify|Proceed|RequestDir|RequestFile)\b
-      scope: support.function.requesters.monkey2
+  module-mojo3d:
+    - match: \b(AnimationMode|ComponentTypeFlags|LightType|SpriteMode|VRAxis|VRButton|VRTrackingSpace)\b
+      scope: support.constant.mojo3d.monkey2
+    - match: \b(Animator|BallSocketJoint|Behaviour|BloomEffect|BoxCollider|Camera|CapsuleCollider|Collider|Component|ComponentType|ConcaveCollider|ConeCollider|ConvexCollider|ConvexHullCollider|CylinderCollider|Entity|FXAAEffect|FixedJoint|FlyBehaviour|GodraysEffect|HingeJoint|Joint|Light|Material|Mesh|MeshCollider|Model|MonochromeEffect|MoveBehaviour|ParticleBuffer|ParticleMaterial|ParticleSystem|PbrMaterial|Pivot|PostEffect|RayCastResult|ReflectionEffect|RenderQueue|Renderable|Renderer|RigidBody|RotateBehaviour|Scene|SphereCollider|Sprite|SpriteMaterial|TerrainCollider|WaterMaterial|World|Mesh|Model|Entity)\b
+      scope: support.class.mojo3d.monkey2
+    - match: \b(Main)\b
+      scope: support.function.mojo3d.monkey2
+    - match: \b(Invocation|InvocationJsonifierExt|Jsonifier|JsonifierExt|MojoJsonifierExt|StdJsonifierExt)\b
+      scope: support.class.mojo3d.jsonifier.monkey2
+    - match: \b(CompareJson)\b
+      scope: support.function.mojo3d.jsonifier.monkey2
+    - match: \b(AssimpLoader)\b
+      scope: support.class.mojo3d-loaders.monkey2
+    - match: \b(VRControllerState|VRRenderer|HmdMatrix34_t|HmdMatrix44_t|HmdVector3_t|AffineMat4f|Mat4f|Vec3f)\b
+      scope: support.class.mojo3d-vr.monkey2
+    - match: \b(Frustum)\b
+      scope: support.function.mojo3d-vr.monkey2
 
   module-mojox:
-    - match: \b(TabViewFlags|Action|Button|CheckButton|CheckGroup|Console|Dialog|DockingView|FileBrowser|HtmlView|Label|Menu|MenuBar|ProgressBar|ProgressDialog|PushButton|ScrollBar|ScrollView|TabView|TableView|TextDialog|TextDocument|TextField|TextView|ToolBar|ToolButton|TreeView|document_container)\b
+    - match: \b(CursorType|TabViewFlags)\b
+      scope: support.constant.mojox.monkey2
+    - match: \b(Action|Button|CheckButton|CheckGroup|Console|Dialog|DockingView|FileBrowser|FilePathView|GridView|HtmlView|Label|ListView|Menu|MenuBar|OptionsField|ProgressBar|ProgressDialog|PushButton|ScrollBar|ScrollView|TabView|TableView|TextDialog|TextDocument|TextField|TextView|ToolBar|ToolButton|TreeView|ViewCell|document_container)\b
       scope: support.class.mojox.monkey2
-    - match: \b(?i:Alert|RequestOkay|RequestString)\b
+    - match: \b(?i:Alert|RequestInt|RequestOkay|RequestString)\b
       scope: support.function.mojox.monkey2
+
+  module-reflection:
+    - match: \b(?i:DebugTypes|GetProperty|GetTypeExtensions|SetProperty)\b
+      scope: support.function.reflection.monkey2
+
+  module-theoraplayer:
+    - match: \b(OutputMode)\b
+      scope: support.constant.theoraplayer.monkey2
+    - match: \b(?i:AudioInterfaceFactory|OpenAL_AudioInterfaceFactory|VideoClip|VideoFrame|VideoManager)\b
+      scope: support.class.theoraplayer.monkey2
 
   monkey-functions:
     - match: \b(?i:Print|Cast)\b
