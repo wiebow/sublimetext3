@@ -42,7 +42,7 @@ contexts:
   body-struct:
     - include: def-enum
     - include: def-function
-    - include: def-method
+    - include: def-method-struct
     - include: def-property
     - include: def-operator
     - include: language
@@ -84,6 +84,7 @@ contexts:
     - include: language
     - include: modules
     - include: variables
+    - include: def-lambda
 
   body-property:
     - include: language
@@ -272,7 +273,7 @@ contexts:
     - match: \b(?=[Ss]truct)\b
       push:
         - meta_scope: meta.struct.monkey2
-        - include: body-class
+        - include: body-struct
 
         - match: (([Ss]truct)\s+([A-Za-z]\w*))
           scope: meta.class.identifier.monkey2
@@ -392,6 +393,24 @@ contexts:
 
         - match: \b(?i:abstract|final|override|virtual)\b
           scope: keyword.monkey2
+
+        - include: body-method
+
+        - match: \b(?i:end\s+method|end)\b
+          scope: punctuation.section.method.end.monkey2
+          captures:
+            0: keyword.monkey2
+          pop: true
+
+  def-method-struct:
+    - match: (?=[Mm]ethod\s+([A-Za-z]\w+))
+      push:
+        - meta_scope: meta.method.monkey2
+        - match: ([Mm]ethod)\s+([A-Za-z]\w+)
+          scope: meta.method.identifier.monkey2
+          captures:
+            1: keyword.monkey2
+            2: entity.name.method-struct.monkey2
 
         - include: body-method
 
